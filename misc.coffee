@@ -11,6 +11,8 @@ Array::equal ?= (o, deep = true) ->
 
 Array::strict_equal ?= (o) -> @equal o, false
 
+Array::clone ?= -> @slice()
+
 id   = -> ++id.x
 id.x = -1
 
@@ -32,5 +34,10 @@ strictEqual ['a', ['b']].equal(['a', ['b']]),     true,  'Array::equal()'
 
 strictEqual [{}].strict_equal([{}]), false, 'Array::strict_equal()'
 
+y = x.clone()
+
+strictEqual y isnt x and y.equal(x), true, 'Array::clone()'
+
 strictEqual id(), 0, 'id()'
 strictEqual id(), 1, 'id()'
+
