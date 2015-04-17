@@ -9,6 +9,7 @@ Array::strict_equal ?= (o) -> @equal o, false
 
 Array::clone ?= -> @slice()
 
+# inherited by Array *and* String
 Object::first      ?= -> @[0]
 Object::last       ?= -> @[@last_index()]
 Object::last_index ?= -> @length - 1
