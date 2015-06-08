@@ -14,6 +14,11 @@ Object::first      ?= -> @[0]
 Object::last       ?= -> @[@last_index()]
 Object::last_index ?= -> @length - 1
 
+Number::bit ?= (i, b) ->
+	n = @valueOf()
+	return n ^ (-b ^ n) & (1 << i) if b?
+	return !!(n >> i & 1)
+
 id   = -> ++id.x
 id.x = -1
 
@@ -44,6 +49,13 @@ strictEqual x.last(),       x[x.length - 1], 'Object::last()'
 strictEqual 'cat'.first(),      'c', 'Object::first()'
 strictEqual 'cat'.last_index(), 2,   'Object::last_index()'
 strictEqual 'cat'.last(),       't', 'Object::last()'
+
+strictEqual (2).bit(1), true, 'Number::bit()'
+strictEqual (4).bit(2), true, 'Number::bit()'
+strictEqual (8).bit(3), true, 'Number::bit()'
+
+strictEqual (2).bit(1, false), 0, 'Number::bit()'
+strictEqual (0).bit(1, true ), 2, 'Number::bit()'
 
 strictEqual id(), 0, 'id()'
 strictEqual id(), 1, 'id()'
