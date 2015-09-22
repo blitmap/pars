@@ -1,13 +1,20 @@
 C = {}
 
-# types + modifiers (alphabetical, modifiers come 2nd; order is important!)
-C[c] = 1 << i for c, i in 'ANY CHOICE MINMAX RANGE RAW REFERENCE SET SEQUENCE BACK CAPTURE NOCASE NOT'.split ' '
+TYPES     = 'ANY CHOICE MINMAX RANGE RAW REFERENCE SET SEQUENCE'.split ' '
+MODIFIERS = 'BACK CAPTURE NOCASE NOT'.split ' '
 
-# for masking off modifiers
-C.TYPE_MASK = C.BACK - 1
+C[c] = 1 << i for c, i in TYPES.concat MODIFIERS
+
+C.TYPE_MASK = C[MODIFIERS[0]] - 1
 
 module.exports = C
 
 return unless require.main is module
 
-# I'm lazy tonight.  tests here soon~
+{ strictEqual } = require 'assert'
+
+ks = Object.keys C
+vs = (v for _, v of C)
+
+strictEqual ks.length, (new Set ks).size, 'constants must have unique identifiers'
+strictEqual vs.length, (new Set vs).size, 'constants must have unique values'
