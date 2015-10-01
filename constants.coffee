@@ -16,5 +16,6 @@ return unless require.main is module
 ks = Object.keys C
 vs = (v for _, v of C)
 
-strictEqual ks.length, (new Set ks).size, 'constants must have unique identifiers'
-strictEqual vs.length, (new Set vs).size, 'constants must have unique values'
+strictEqual ks.length,       (new Set ks).size, 'constants must have unique identifiers'
+strictEqual vs.length,       (new Set vs).size, 'constants must have unique values'
+strictEqual ks.length <= 32, true,              'too many constants'
