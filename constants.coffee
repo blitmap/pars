@@ -6,6 +6,7 @@ MODIFIERS = 'BACK CAPTURE NOCASE NOCONSUME NOT'.split ' '
 C[c] = 1 << i for c, i in TYPES.concat MODIFIERS
 
 C.TYPE_MASK = C[MODIFIERS[0]] - 1
+C.MOD_MASK  = ~C.TYPE_MASK
 
 module.exports = C
 
