@@ -14,6 +14,8 @@ Object::first      ?= -> @[0]
 Object::last       ?= -> @[@last_index()]
 Object::last_index ?= -> @length - 1
 
+Object::values ?= (o) -> (v for own _, v of o)
+
 Number::bit ?= (i, b) ->
 	n = @valueOf()
 	return n ^ (-b ^ n) & (1 << i) if b?
@@ -45,6 +47,8 @@ strictEqual y isnt x and y.equal(x), true, 'Array::clone()'
 strictEqual x.first(),      x[0],            'Object::first()'
 strictEqual x.last_index(), x.length - 1,    'Object::last_index()'
 strictEqual x.last(),       x[x.length - 1], 'Object::last()'
+
+strictEqual Object.values({ a: 'cat', b: 'dog', c: 'rat', d: 'horse' })[2], 'rat', 'Object::values()'
 
 strictEqual 'cat'.first(),      'c', 'Object::first()'
 strictEqual 'cat'.last_index(), 2,   'Object::last_index()'
