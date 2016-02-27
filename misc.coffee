@@ -7,8 +7,6 @@ Array::equal ?= (o, deep = true) ->
 
 Array::strict_equal ?= (o) -> @equal o, false
 
-Array::clone ?= -> @slice()
-
 # inherited by Array *and* String
 Object::first      ?= -> @[0]
 Object::last       ?= -> @[@last_index()]
@@ -40,9 +38,6 @@ strictEqual ['a', ['b']].equal(['a', ['b']]),     true,  'Array::equal()'
 strictEqual [{}].strict_equal([{}]), false, 'Array::strict_equal()'
 
 x = [ 'a', 'b', 'c' ]
-y = x.clone()
-
-strictEqual y isnt x and y.equal(x), true, 'Array::clone()'
 
 strictEqual x.first(),      x[0],            'Object::first()'
 strictEqual x.last_index(), x.length - 1,    'Object::last_index()'
