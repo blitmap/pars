@@ -1,3 +1,5 @@
+require './misc'
+
 C = {}
 
 ###
@@ -31,11 +33,11 @@ module.exports = C
 
 return unless require.main is module
 
-{ strictEqual } = require 'assert'
+{ ok } = require 'assert'
 
 ks = Object.keys   C
 vs = Object.values C
 
-strictEqual ks.length,       (new Set ks).size, 'constants must have unique identifiers'
-strictEqual vs.length,       (new Set vs).size, 'constants must have unique values'
-strictEqual ks.length <= 32, true,              'too many constants'
+ok ks.length is (new Set ks).size, 'constants must have unique identifiers'
+ok vs.length is (new Set vs).size, 'constants must have unique values'
+ok ks.length <= 32,                'too many constants'
