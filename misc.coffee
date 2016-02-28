@@ -7,6 +7,8 @@ Array::equal ?= (o, deep = true) ->
 
 Array::strict_equal ?= (o) -> @equal o, false
 
+Function::property = (prop, desc) -> Object.defineProperty @::, prop, desc
+
 # inherited by Array *and* String
 Object::first      ?= -> @[0]
 Object::last       ?= -> @[@last_index()]
@@ -26,16 +28,26 @@ module.exports = { id }
 
 return unless require.main is module
 
-{ strictEqual } = require 'assert'
+{ ok, strictEqual } = require 'assert'
 
-strictEqual ['a']       .equal('cat'),            false, 'Array::equal()'
-strictEqual ['a']       .equal(['a']),            true,  'Array::equal()'
-strictEqual ['a']       .equal(['b']),            false, 'Array::equal()'
-strictEqual ['a', []]   .equal(['a', []]),        true,  'Array::equal()'
-strictEqual ['a', []]   .equal(['a', []], false), false, 'Array::equal()'
-strictEqual ['a', ['b']].equal(['a', ['b']]),     true,  'Array::equal()'
+fail = ->
+	arguments[0] = not arguments[0]
+	ok arguments...
 
-strictEqual [{}].strict_equal([{}]), false, 'Array::strict_equal()'
+fail ['a']       .equal('cat'),            'Array::equal()'
+ok   ['a']       .equal(['a']),            'Array::equal()'
+fail ['a']       .equal(['b']),            'Array::equal()'
+ok   ['a', []]   .equal(['a', []]),        'Array::equal()'
+fail ['a', []]   .equal(['a', []], false), 'Array::equal()'
+ok   ['a', ['b']].equal(['a', ['b']]),     'Array::equal()'
+
+fail [{}].strict_equal([{}]), 'Array::strict_equal()'
+
+class Whatever
+	@property 'cat',
+		get: -> 'dog'
+
+strictEqual (new Whatever).cat, 'dog', 'Function::property()'
 
 x = [ 'a', 'b', 'c' ]
 
@@ -49,12 +61,13 @@ strictEqual 'cat'.first(),      'c', 'Object::first()'
 strictEqual 'cat'.last_index(), 2,   'Object::last_index()'
 strictEqual 'cat'.last(),       't', 'Object::last()'
 
-strictEqual (2).bit(1), true, 'Number::bit()'
-strictEqual (4).bit(2), true, 'Number::bit()'
-strictEqual (8).bit(3), true, 'Number::bit()'
+ok (2).bit(1), 'Number::bit()'
+ok (4).bit(2), 'Number::bit()'
+ok (8).bit(3), 'Number::bit()'
 
 strictEqual (2).bit(1, false), 0, 'Number::bit()'
 strictEqual (0).bit(1, true ), 2, 'Number::bit()'
 
 strictEqual id(), 0, 'id()'
 strictEqual id(), 1, 'id()'
+strictEqual id(), 2, 'id()'
